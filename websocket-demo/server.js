@@ -3,7 +3,7 @@ var app=require('http').createServer(handler);
 var ws=require('nodejs-websocket');
 var fs=require('fs');
 
-app.listen(80);
+app.listen(8093);
 
 function handler(req,res){
     fs.readFile(__dirname+'/client.html',function(err,data){
