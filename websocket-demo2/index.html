@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<label>聊天内容:</label><br />
+	<textarea id="content" style="height: 200px; width:300px;"></textarea>
+	<br />
+	<input id="sendMsg" type="text" />
+	<button id="btn_send">发送</button>
+<script src="/socket.io/socket.io.js"></script>	
+<script>
+  var socket = io('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+  // 监听 receiveMsg 事件，用来接收其他客户端推送的消息
+  socket.on("receiveMsg", function (data) {
+      content.value += data.client + ":" + data.msg + "\r\n";
+  });
+  
+  var content = document.getElementById("content");
+  var sendMsg = document.getElementById("sendMsg");
+  var btn_send = document.getElementById("btn_send");
+  btn_send.addEventListener("click", function () {
+      var data = {
+          client: "客户端",
+          msg: sendMsg.value
+      };
+      //给服务端发送 sendMsg事件名的消息
+      socket.emit("sendMsg", data);
+      content.value += data.client + ":" + data.msg + "\r\n";
+      sendMsg.value = "";
+  });
+  
+  
+</script>	
+</body>
+
+</html>
+
+
